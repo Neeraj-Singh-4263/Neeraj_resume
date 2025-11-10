@@ -15,6 +15,8 @@
   --ring:0 6px 30px rgb(0 0 0 / 8%);
   --print-scale:0.93; /* adjust for one-page fit (0.90–0.96) */
 }
+
+/* optional helper used while capturing screenshot to remove blob blur */
 html.screenshot .bg-blob { filter: none !important; }
 
 *{ box-sizing:border-box; }
@@ -250,3 +252,64 @@ html.onepage .bg-blob {
 
   .print-hide { display: none !important; }
 }
+
+/* ===== FORCE DESKTOP LAYOUT FOR PDF CAPTURE =====
+   Applied when html.pdf-capture is added by JS.
+   These rules *override* mobile @media styles so cover looks like desktop.
+   ================================================== */
+
+html.pdf-capture, body.pdf-capture {
+  /* Force a consistent desktop viewport width */
+  min-width: 1080px !important;
+  width: 1080px !important;
+  overflow: visible !important;
+  -webkit-transform: none !important;
+  transform: none !important;
+}
+
+/* Ensure page container uses desktop width and spacing */
+html.pdf-capture .page {
+  width: 1080px !important;
+  max-width: 1080px !important;
+  margin: 12px auto !important;
+  padding: 40px 28px !important;
+  box-shadow: none !important;
+}
+
+/* Force two-column desktop grid (override mobile @media) */
+html.pdf-capture .content {
+  display: grid !important;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr) !important;
+  gap: 28px !important;
+  align-items: start !important;
+}
+
+/* Ensure header sizing looks desktop-like */
+html.pdf-capture .name {
+  font-size: clamp(40px, 5.8vw, 96px) !important;
+  line-height: 0.95 !important;
+}
+html.pdf-capture .role { font-size: clamp(18px, 2.6vw, 36px) !important; }
+
+/* Make sidebar cards appear as desktop version */
+html.pdf-capture .sidecol { display: block !important; }
+
+/* Make sure any mobile-specific reorder is undone */
+html.pdf-capture .sidecol { order: 0 !important; }
+html.pdf-capture .maincol { order: 0 !important; }
+
+/* Hide the download button during capture (so it never appears in PDF) */
+html.pdf-capture .print-btn { display: none !important; }
+
+/* Improve blob look during capture */
+html.pdf-capture .bg-blob { filter: none !important; opacity: 0.95 !important; }
+
+/* If you use any mobile-only rules that hide desktop elements,
+   re-enable them explicitly here as needed:
+   e.g. html.pdf-capture .some-mobile-only { display: none !important; }
+*/
+
+/* Small tweak to ensure anchors remain visible and positioned as on desktop */
+html.pdf-capture a { pointer-events: auto !important; }
+
+/* end of "force desktop for pdf" */
